@@ -13,16 +13,22 @@ from torch.utils.tensorboard import SummaryWriter
 from dataloader import CustomDataLoader
 
 def get_transforms(train):
-  t = [transforms.Resize([256, 256])]
   if train:
-    t.append(transforms.RandomCrop((224, 224)))
-    t.append(transforms.RandomHorizontalFlip(0.5))
-    t.append(transforms.RandomVerticalFlip(0.5))
-    # t.append(transforms.GaussianBlur((7, 7), 2))
+    t = transforms.Compose(
+      [
+      transforms.Resize([256, 256])
+      transforms.RandomCrop((224, 224)))
+      transforms.RandomHorizontalFlip(0.5))
+      transforms.RandomVerticalFlip(0.5))
+      transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+      ])
   else:
-    t.append(transforms.CenterCrop((224, 224)))
-  t.append(transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]))
-  return transforms.Compose(t)
+    t = transforms.Compose(
+      [
+      transforms.CenterCrop((224, 224))
+      transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+      ])
+  return t
 
 def train_epoch(model, loader, optimizer, batch_size, writer, epoch):
   model.train()
@@ -63,12 +69,6 @@ if __name__ == '__main__':
     model = resnet50(pretrained=False)
     model.fc = nn.Linear(2048, 2)
     count = 0
-    for child in model.children():
-        count += 1
-        if count == 7:
-            break
-        for param in child.parameters():
-            param.requires_grad = False
     model.cuda()
     train_transforms = get_transforms('train')
     test_transforms = get_transforms('test')
