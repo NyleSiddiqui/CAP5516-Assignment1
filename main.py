@@ -16,17 +16,17 @@ def get_transforms(train):
   if train:
     t = transforms.Compose(
       [
-      transforms.Resize([256, 256])
-      transforms.RandomCrop((224, 224)))
-      transforms.RandomHorizontalFlip(0.5))
-      transforms.RandomVerticalFlip(0.5))
-      transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+      transforms.Resize([256, 256]),
+      transforms.RandomCrop((224, 224)),
+      transforms.RandomHorizontalFlip(0.5),
+      transforms.RandomVerticalFlip(0.5),
+      transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
       ])
   else:
     t = transforms.Compose(
       [
-      transforms.CenterCrop((224, 224))
-      transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+      transforms.CenterCrop((224, 224)),
+      transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
       ])
   return t
 
